@@ -1,0 +1,22 @@
+<div id="yale_repositories_fields">
+  <% form.push("repository", form['repository']) do |form| %>
+    <%= form.label_and_textfield "libcal_id" %>
+    <%= form.label_and_textfield "latitude" %>
+    <%= form.label_and_textfield "longitude" %>
+
+    <% if form.readonly? %>
+      <% if form.obj['latitude'] && form.obj['longitude'] && AppConfig.has_key?(:google_maps_api_key) %>
+        <iframe width="600"
+                height="450"
+                frameborder="0"
+                style="border:0"
+                src="https://www.google.com/maps/embed/v1/place?q=<%= form.obj['latitude'] %>,<%= form.obj['longitude'] %>&key=<%= AppConfig[:google_maps_api_key] %>"
+                allowfullscreen>
+        </iframe>
+      <% end %>
+    <% end %>
+  <% end  %>
+</div>
+<script>
+  $('#yale_repositories_fields').closest('.record-pane').find('#all_fields').append($('#yale_repositories_fields'));
+</script>
