@@ -7,10 +7,11 @@ Rails.application.config.after_initialize do
 
       if options[:partial] == "repositories/repository"
         # display on the repo show template
+        full = options.dig(:locals, :full) || false
         result += render(context, :partial => 'repositories/repository_ext',
                                   :locals => options[:locals].merge({
-                                    :show_map => true,
-                                    :show_opening_hours => true,
+                                    :show_map => full,
+                                    :show_opening_hours => full,
                                   }))
 
       elsif options[:partial] == "repositories/full_repo"
