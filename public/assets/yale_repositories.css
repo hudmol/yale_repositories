@@ -11,3 +11,13 @@
     width: 100% !important;
     height: 100% !important;
 }
+@media (max-width:600px) {
+    body .google-maps {
+        padding-bottom: 60%;
+    }
+}
+@media (min-width: 992px) {
+    body .google-maps {
+        padding-bottom: 20%;
+    }
+}
