@@ -4,9 +4,14 @@
   show_map = false if !defined?(:show_map)
   show_opening_hours = false if !defined?(:show_opening_hours)
   show_access_information = false if !defined?(:show_access_information)
+
+  location_fields = ['address_1', 'address_2', 'address_3', 'city', 'region', 'post_code', 'country']
+  geocoord_fields = ['longitude', 'latitude']
 %>
 
-<% if show_location && !(result.dig('location') || {}).reject{|k,_| k == 'libcal_id'}.empty? %>
+<% if show_location &&
+      (location_fields.any?{|f| result.dig('location', f)} ||
+        (show_map && geocoord_fields.all?{|f| result.dig('location', f)})) %>
   <h3>Location</h3>
 
   <p>
@@ -26,7 +31,7 @@
     <%= result.dig('location', 'country') %>
   </p>
 
-  <% if show_map && result.dig('location', 'latitude') && result.dig('location', 'longitude') && AppConfig.has_key?(:google_maps_api_key) %>
+  <% if show_map && geocoord_fields.all?{|f| result.dig('location', f)} && AppConfig.has_key?(:google_maps_api_key) %>
     <div class="google-maps">
       <iframe width="600"
               height="450"
