@@ -9,18 +9,20 @@ Sequel.migration do
 
       Integer :repository_id, :null => false
 
-      TextField :address_1, :null => true
-      TextField :address_2, :null => true
-      TextField :address_3, :null => true
-      TextField :city, :null => true
-      TextField :region, :null => true
-      TextField :country, :null => true
-      TextField :post_code, :null => true
+      String :address_1, :null => true
+      String :address_2, :null => true
+      String :address_3, :null => true
+      String :city, :null => true
+      String :region, :null => true
+      String :country, :null => true
+      String :post_code, :null => true
 
-      TextField :latitude, :null => true
-      TextField :longitude, :null => true
+      String :latitude, :null => true
+      String :longitude, :null => true
 
-      TextField :libcal_id, :null => true
+      TextField :access_information, :null => true
+
+      String :libcal_id, :null => true
 
       apply_mtime_columns
     end

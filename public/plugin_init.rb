@@ -10,8 +10,10 @@ Rails.application.config.after_initialize do
         full = options.dig(:locals, :full) || false
         result += render(context, :partial => 'repositories/repository_ext',
                                   :locals => options[:locals].merge({
+                                    :show_location => full,
                                     :show_map => full,
                                     :show_opening_hours => full,
+                                    :show_access_information => full,
                                   }))
 
       elsif options[:partial] == "repositories/full_repo"
@@ -19,8 +21,10 @@ Rails.application.config.after_initialize do
         result += render(context, :partial => 'repositories/repository_ext',
                          :locals => options[:locals].merge({
                            :result => options.dig(:locals, :info, 'top') || {},
+                           :show_location => true,
                            :show_map => false,
                            :show_opening_hours => true,
+                           :show_access_information => true,
                          }))
       end
 
@@ -37,6 +41,7 @@ Rails.application.config.after_initialize do
 
       unless resolved_repository.nil?
         info['top']['location'] = resolved_repository['location'] || {}
+        info['top']['description'] = resolved_repository['description']
       end
 
       info

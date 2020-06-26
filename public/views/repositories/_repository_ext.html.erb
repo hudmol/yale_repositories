@@ -1,10 +1,12 @@
 <!-- new yale stuff here -->
 <%
+  show_location = false if !defined?(:show_location)
   show_map = false if !defined?(:show_map)
   show_opening_hours = false if !defined?(:show_opening_hours)
+  show_access_information = false if !defined?(:show_access_information)
 %>
 
-<% unless (result.dig('location') || {}).reject{|k,_| k == 'libcal_id'}.empty? %>
+<% if show_location && !(result.dig('location') || {}).reject{|k,_| k == 'libcal_id'}.empty? %>
   <h3>Location</h3>
 
   <p>
@@ -53,4 +55,9 @@
 
     //--><!]]>
   </script>
+<% end %>
+
+<% if show_access_information && result.dig('location', 'access_information') %>
+  <h3>Access Information</h3>
+  <%= simple_format(result.dig('location', 'access_information')) %>
 <% end %>

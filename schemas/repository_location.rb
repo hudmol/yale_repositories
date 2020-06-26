@@ -14,6 +14,7 @@
       "latitude" => {"type" => "string"},
       "longitude" => {"type" => "string"},
       "libcal_id" => {"type" => "string"},
+      "access_information" => {"type" => "string"},
     },
   },
 }
