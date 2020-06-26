@@ -1,0 +1,3 @@
+require_relative 'repository_location'
+
+Repository.include(RepositoryLocations)

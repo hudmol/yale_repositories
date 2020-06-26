@@ -3,7 +3,41 @@
   show_map = false if !defined?(:show_map)
   show_opening_hours = false if !defined?(:show_opening_hours)
 %>
-<% if show_opening_hours && result['libcal_id'] && AppConfig.has_key?(:libcal_service_id) %>
+
+<% unless (result.dig('location') || {}).reject{|k,_| k == 'libcal_id'}.empty? %>
+  <h3>Location</h3>
+
+  <p>
+    <% ['address_1', 'address_2', 'address_3'].each do |address_line_field| %>
+      <% next unless result.dig('location', address_line_field) %>
+      <%= result.dig('location', address_line_field) %><br/>
+    <% end %>
+
+    <% place = '%s, %s %s' % [result.dig('location', 'city'),
+                              result.dig('location', 'region'),
+                              result.dig('location', 'post_code')] %>
+    <% place = place.sub(/^\,/, '').strip %>
+    <% if place.length > 0 %>
+      <%= place %><br/>
+    <% end %>
+
+    <%= result.dig('location', 'country') %>
+  </p>
+
+  <% if show_map && result.dig('location', 'latitude') && result.dig('location', 'longitude') && AppConfig.has_key?(:google_maps_api_key) %>
+    <div class="google-maps">
+      <iframe width="600"
+              height="450"
+              frameborder="0"
+              style="border:0"
+              src="https://www.google.com/maps/embed/v1/place?q=<%= result.dig('location', 'latitude') %>,<%= result.dig('location', 'longitude') %>&key=<%= AppConfig[:google_maps_api_key] %>"
+              allowfullscreen>
+      </iframe>
+    </div>
+  <% end %>
+<% end %>
+
+<% if show_opening_hours && result.dig('location', 'libcal_id') && AppConfig.has_key?(:libcal_service_id) %>
   <h3>Opening Hours</h3>
   <script src="//api3.libcal.com/js/hours_grid.js?002"></script>
   <div id="libcal-open-hours"></div>
@@ -12,24 +46,11 @@
     $(function(){
       new $.LibCalWeeklyGrid( $("#libcal-open-hours"), {
         iid: <%= AppConfig[:libcal_service_id] %>,
-        lid: <%= result['libcal_id'] %>,
+        lid: <%= result.dig('location', 'libcal_id') %>,
         weeks: <%= AppConfig.has_key?(:libcal_weeks_to_display) ? AppConfig[:libcal_weeks_to_display] : 18 %>
       });
     });
 
     //--><!]]>
   </script>
-<% end %>
-
-<% if show_map&& result['latitude'] && result['longitude'] && AppConfig.has_key?(:google_maps_api_key) %>
-  <h3>Find Us</h3>
-  <div class="google-maps">
-    <iframe width="600"
-            height="450"
-            frameborder="0"
-            style="border:0"
-            src="https://www.google.com/maps/embed/v1/place?q=<%= result['latitude'] %>,<%= result['longitude'] %>&key=<%= AppConfig[:google_maps_api_key] %>"
-            allowfullscreen>
-    </iframe>
-  </div>
 <% end %>

@@ -36,9 +36,7 @@ Rails.application.config.after_initialize do
       info = parse_repository_info_pre_yale_repositories
 
       unless resolved_repository.nil?
-        info['top']['libcal_id'] = resolved_repository['libcal_id']
-        info['top']['latitude'] = resolved_repository['latitude']
-        info['top']['longitude'] = resolved_repository['longitude']
+        info['top']['location'] = resolved_repository['location'] || {}
       end
 
       info

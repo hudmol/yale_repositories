@@ -1,25 +1,105 @@
 <div id="yale_repositories_fields">
   <% form.push("repository", form['repository']) do |form| %>
-    <%= form.label_and_textfield "libcal_id" %>
-    <%= form.label_and_textfield "latitude" %>
-    <%= form.label_and_textfield "longitude" %>
-
-    <% if form.readonly? %>
-      <% if form.obj['latitude'] && form.obj['longitude'] && AppConfig.has_key?(:google_maps_api_key) %>
-        <hr />
-        <div class="google-maps">
-          <iframe width="600"
-                  height="450"
-                  frameborder="0"
-                  style="border:0"
-                  src="https://www.google.com/maps/embed/v1/place?q=<%= form.obj['latitude'] %>,<%= form.obj['longitude'] %>&key=<%= AppConfig[:google_maps_api_key] %>"
-                  allowfullscreen>
-          </iframe>
+    <% form.push("location", form['location'] || {}) do |form| %>
+      <% if !form.readonly? || form.obj['libcal_id'] %>
+        <div class="subrecord-form-dummy" id="opening_hours">
+          <h3>Opening Hours</h3>
+          <div class="subrecord-form-container">
+            <div class="subrecord-form-fields">
+              <%= form.label_and_textfield "libcal_id" %>
+              <% unless form.readonly? %>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-9">
+                    <p>
+                      <small class="text-muted">Provide the Libcal assigned ID for your repository to display opening hours on your repository's public page.</small>
+                    </p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
+        <script>
+          <% if form.readonly? %>
+            $('#archivesSpaceSidebar .nav').append('<li><a href="#opening_hours">Opening Hours</a></li>');
+          <% else  %>
+            $('#archivesSpaceSidebar .nav .form-actions').before('<li><a href="#opening_hours">Opening Hours</a></li>');
+          <% end %>
+        </script>
+      <% end %>
+
+      <%
+        location_fields = ['address_1', 'address_2', 'address_3', 'city', 'region', 'post_code', 'country']
+        geocoord_fields = ['longitude', 'latitude']
+      %>
+      <% if !form.readonly? || location_fields.any?{|f| form.obj[f]} || geocoord_fields.any?{|f| form.obj[f]} %>
+        <div class="subrecord-form-dummy" id="repository_location">
+          <h3>Location</h3>
+          <div class="subrecord-form-container">
+            <div class="subrecord-form-fields">
+              <% if !form.readonly? || location_fields.any?{|f| form.obj[f]} %>
+                <div class="form-group">
+                  <div class="col-sm-2 text-right">
+                    <h4>Address</h4>
+                  </div>
+                </div>
+                <%= form.label_and_textfield "address_1" %>
+                <%= form.label_and_textfield "address_2" %>
+                <%= form.label_and_textfield "address_3" %>
+                <%= form.label_and_textfield "city" %>
+                <%= form.label_and_textfield "region" %>
+                <%= form.label_and_textfield "post_code" %>
+                <%= form.label_and_textfield "country" %>
+              <% end %>
+
+              <% if !form.readonly? || geocoord_fields.any?{|f| form.obj[f]} %>
+                <div class="form-group">
+                  <div class="col-sm-2 text-right">
+                    <h4>Google Maps</h4>
+                  </div>
+                </div>
+
+                <%= form.label_and_textfield "latitude" %>
+                <%= form.label_and_textfield "longitude" %>
+
+                <% unless form.readonly? %>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-9">
+                      <p>
+                        <small class="text-muted">Provide your repository location geo coordinates to enable a Google Map on your repository's public page.</small>
+                      </p>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+              <% if form.readonly? %>
+                <% if geocoord_fields.all?{|f| form.obj[f]} && AppConfig.has_key?(:google_maps_api_key) %>
+                  <div class="google-maps">
+                    <iframe width="600"
+                            height="450"
+                            frameborder="0"
+                            style="border:0"
+                            src="https://www.google.com/maps/embed/v1/place?q=<%= form.obj['latitude'] %>,<%= form.obj['longitude'] %>&key=<%= AppConfig[:google_maps_api_key] %>"
+                            allowfullscreen>
+                    </iframe>
+                  </div>
+                  <div class="clearfix"></div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <script>
+          <% if form.readonly? %>
+            $('#archivesSpaceSidebar .nav').append('<li><a href="#repository_location">Location</a></li>');
+          <% else  %>
+            $('#archivesSpaceSidebar .nav .form-actions').before('<li><a href="#repository_location">Location</a></li>');
+          <% end %>
+        </script>
       <% end %>
     <% end %>
   <% end  %>
 </div>
 <script>
-  $('#yale_repositories_fields').closest('.record-pane').find('#all_fields').append($('#yale_repositories_fields'));
+  $('#yale_repositories_fields').closest('fieldset').append($('#yale_repositories_fields'));
 </script>

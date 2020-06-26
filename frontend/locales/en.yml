@@ -3,3 +3,5 @@ en:
     libcal_id: Libcal ID
     latitude: Latitude
     longitude: Longitude
+    region: State/Region
+    address_3: Address 3
