@@ -14,6 +14,7 @@ Rails.application.config.after_initialize do
                                     :show_map => full,
                                     :show_opening_hours => full,
                                     :show_access_information => full,
+                                    :heading_tag => 'h3',
                                   }))
 
       elsif options[:partial] == "repositories/full_repo"
@@ -25,6 +26,7 @@ Rails.application.config.after_initialize do
                            :show_map => false,
                            :show_opening_hours => true,
                            :show_access_information => true,
+                           :heading_tag => 'h4',
                          }))
       end
 

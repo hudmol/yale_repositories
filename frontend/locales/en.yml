@@ -6,3 +6,13 @@ en:
     region: State/Region
     address_3: Address 3
     access_information: Access Information
+  plugin:
+    yale_repositories:
+      location_details: Location Details
+      location: Location
+      opening_hours: Opening Hours
+      opening_hours_info: Provide the Libcal assigned ID for your repository to display opening hours on your repository's public page.
+      access: Access
+      address: Address
+      google_maps: Google Maps
+      google_maps_info: Provide your repository location geo coordinates to enable a Google Map on your repository's public page.

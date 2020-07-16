@@ -1,0 +1,6 @@
+en:
+  plugin:
+    yale_repositories:
+      location: Location
+      opening_hours: Opening Hours
+      access_information: Access Information

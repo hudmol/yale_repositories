@@ -7,12 +7,16 @@
 
   location_fields = ['address_1', 'address_2', 'address_3', 'city', 'region', 'post_code', 'country']
   geocoord_fields = ['longitude', 'latitude']
-%>
 
+  heading_tag = 'h3' if !defined?(:heading_tag)
+%>
+<div class="yale-repositories-extra-content">
 <% if show_location &&
       (location_fields.any?{|f| result.dig('location', f)} ||
         (show_map && geocoord_fields.all?{|f| result.dig('location', f)})) %>
-  <h3>Location</h3>
+  <<%= heading_tag %>>
+    <%= t('plugins.yale_repositories.location') %>
+  </<%= heading_tag %>>
 
   <p>
     <% ['address_1', 'address_2', 'address_3'].each do |address_line_field| %>
@@ -45,7 +49,9 @@
 <% end %>
 
 <% if show_opening_hours && result.dig('location', 'libcal_id') && AppConfig.has_key?(:libcal_service_id) %>
-  <h3>Opening Hours</h3>
+  <<%= heading_tag %>>
+    <%= t('plugins.yale_repositories.opening_hours') %>
+  </<%= heading_tag %>>
   <script src="//api3.libcal.com/js/hours_grid.js?002"></script>
   <div id="libcal-open-hours"></div>
   <script>
@@ -63,6 +69,9 @@
 <% end %>
 
 <% if show_access_information && result.dig('location', 'access_information') %>
-  <h3>Access Information</h3>
+  <<%= heading_tag %>>
+    <%= t('plugins.yale_repositories.access_information') %>
+  </<%= heading_tag %>>
   <%= simple_format(result.dig('location', 'access_information')) %>
 <% end %>
+</div>
